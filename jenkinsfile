@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+    
+    environment {
+        access-key  = credentials('access-key')
+        secret-key = credentials('secret-key')
+    }
+    
+    stages {
+        stage('Terraform Init') {
+            steps {
+                sh 'terraform init'
+            }
+        }
+        stage('Terraform Plan') {
+            steps {
+                sh 'terraform plan'
+            }
+        }
+        stage('Terraform Apply') {
+            when {
+                expression {
+                    // This expression will only trigger the stage if the branch name starts with "deploy/"
+                    return env.BRANCH_NAME.startsWith('deploy/')
+                }
+            }
+            steps {
+                sh 'terraform apply -auto-approve'
+            }
+        }
+    }
+}
