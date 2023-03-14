@@ -44,12 +44,12 @@ resource "aws_eks_node_group" "Eks-node_group" {
   node_group_name = "example-node-group"
 
   node_role_arn = aws_iam_role.eks_node_group-role.arn
-  instance_types  = ["t2.micro"] 
+  instance_types  = ["t3.medium"] 
   
   scaling_config {
-    desired_size = 2
-    max_size     = 2
-    min_size     = 2
+    desired_size = 4
+    max_size     = 4
+    min_size     = 4
   }
 
   remote_access {
@@ -104,4 +104,4 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
     role        = aws_iam_role.eks_node_group-role.name
 }
 
-# Create a security group for the worker nodes
+
