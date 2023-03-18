@@ -1,3 +1,4 @@
+#creating kubernetes cluster 
 resource "aws_eks_cluster" "Alt-eks" {
   name     = "Alt-eks"
   role_arn = aws_iam_role.eks_cluster-role.arn

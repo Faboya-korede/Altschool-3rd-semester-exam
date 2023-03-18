@@ -12,6 +12,7 @@ data "aws_eks_cluster_auth" "Alt-eks" {
   name = "Alt-eks"
 }
 
+#this is to get all the yaml files i have in my directory 
 data "kubectl_filename_list" "manifests" {
   pattern = "./*.yaml"
 }

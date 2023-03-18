@@ -31,7 +31,27 @@ resource "aws_route53_record" "microservice" {
 }
 
 
+resource "aws_route53_record" "grafana" {
+  depends_on = [kubernetes_ingress_v1.microservice, data.local_file.lb_hostname]
+  zone_id = data.aws_route53_zone.example.zone_id   
+
+  name    = "grafana" 
+  type    = "CNAME"
+  ttl     = "300"
+
+  records = [data.local_file.lb_hostname.content]
+}
 
 
+resource "aws_route53_record" "prometheus" {
+  depends_on = [kubernetes_ingress_v1.microservice, data.local_file.lb_hostname]
+  zone_id = data.aws_route53_zone.example.zone_id   
+
+  name    = "prometheus" 
+  type    = "CNAME"
+  ttl     = "300"
+
+  records = [data.local_file.lb_hostname.content]
+}
 
 

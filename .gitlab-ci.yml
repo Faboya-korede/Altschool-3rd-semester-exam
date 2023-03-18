@@ -21,7 +21,6 @@ before_script:
 
 stages:
     - configure
-    - init
     - validate
     - plan 
     - apply
@@ -36,11 +35,6 @@ configure:
         - aws configure set region $AWS_DEFAULT_REGION
 
 
-init:
-    stage: init
-    script: 
-        - terraform init 
-   
 validate:
     stage: validate 
     script:

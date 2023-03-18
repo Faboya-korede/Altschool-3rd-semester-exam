@@ -1,3 +1,4 @@
+#Terraform backend to store state  files 
 terraform {
  backend "s3" {
    region = "us-east-1"
@@ -5,3 +6,4 @@ terraform {
    key    = "terrafform/korede/state.tfstate"
  }
 }
+

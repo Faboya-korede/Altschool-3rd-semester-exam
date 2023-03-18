@@ -1,4 +1,4 @@
-# Create a security group for the worker nodes
+# Create a security group for the Eks worker nodes
 resource "aws_security_group" "eks_sg" {
   name   = "HTTP and SSH"
   vpc_id = aws_vpc.main.id
