@@ -8,14 +8,15 @@ before_script:
     - rm -rf .terraform 
     - terraform --version
     - terraform init 
-    - apt update
-    - apt add curl python3 py3-pip
-    - apt install awscli
+    - apk update
+    - apk add unzip
+    - apk add curl python3 py3-pip
+    - apk add aws-cli
     - curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
     - mv /tmp/eksctl /usr/local/bin
     - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
     - chmod +x ./kubectl
-    - sudo mv ./kubectl /usr/local/bin/kubectl
+    - mv ./kubectl /usr/local/bin/kubectl
 
 
 stages:
@@ -31,7 +32,7 @@ configure:
     script:
         - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID 
         - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-        - aws configure set region $AWS_REGION
+        - aws configure set region $AWS_DEFAULT_REGION
     
 validate:
     stage: validate 
@@ -71,4 +72,3 @@ destroy:
     only: 
         - master 
         
-
