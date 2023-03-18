@@ -15,11 +15,13 @@ provider "acme" {
 }
 
 resource "tls_private_key" "private_key" {
+  depends_on = [aws.aws_route53_zone.korede]
   algorithm = "RSA"
 }
 
 
 resource "acme_registration" "registration" {
+  depends_on = [tls_private_key.private_key]  
   account_key_pem = tls_private_key.private_key.private_key_pem
   email_address   = "faboyakorede@gmail.com" 
 }
