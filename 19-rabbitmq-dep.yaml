@@ -18,7 +18,7 @@ spec:
       annotations:
         prometheus.io/scrape: "false"
     spec:
-      containers:
+     containers:
       - name: rabbitmq
         image: rabbitmq:3.6.8-management
         ports:
@@ -41,5 +41,5 @@ spec:
         ports:
         - containerPort: 9090
           name: exporter
-      nodeSelector:
+        nodeSelector:
         beta.kubernetes.io/os: linux

@@ -23,6 +23,7 @@ spec:
         ports:
         - name: mongo
           containerPort: 27017
+        nodeSelector:  
         securityContext:
           capabilities:
             drop:
@@ -39,5 +40,5 @@ spec:
         - name: tmp-volume
           emptyDir:
             medium: Memory
-      nodeSelector:
-        beta.kubernetes.io/os: linux
+         
+          beta.kubernetes.io/os: linux

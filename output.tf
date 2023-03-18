@@ -5,3 +5,5 @@ output "cluster_id" {
 output "cluster_endpoint" {
     value = aws_eks_cluster.Alt-eks.endpoint
 }
+
+
