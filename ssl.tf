@@ -1,48 +1,49 @@
-resource "aws_acm_certificate" "acm_certificate" {
-    depends_on = [aws_route53_zone.korede]
-  domain_name = var.domain_name
-  subject_alternative_names = ["*.korede.me"]
-  validation_method = "DNS"
-  
-  lifecycle {
-      create_before_destroy = true
+terraform {
+  #required_version = "~> 1.0.3"
+
+  required_providers {
+    acme = {
+      source  = "vancluever/acme"
+      version = "~> 2.5.3"
+    }
   }
 }
 
-resource "aws_route53_zone" "korede" {
-  name = var.domain_name
- lifecycle {
-  prevent_destroy = false
+provider "acme" {
+  server_url = "https://acme-staging-v02.api.letsencrypt.org/directory"
+  #server_url = "https://acme-v02.api.letsencrypt.org/directory"
 }
 
-}
-
-
-resource "aws_route53_record" "voting" {
-  depends_on = [kubernetes_ingress_v1.voting, data.local_file.lb_hostname]
-  zone_id = data.aws_route53_zone.example.zone_id  
-
-  name    = "voting"
-  type    = "CNAME"
-  ttl     = "300"
-
-  records = [data.local_file.lb_hostname.content]
+resource "tls_private_key" "private_key" {
+  algorithm = "RSA"
 }
 
 
-resource "aws_route53_record" "microservice" {
-  depends_on = [kubernetes_ingress_v1.microservice, data.local_file.lb_hostname]
-  zone_id = data.aws_route53_zone.example.zone_id   
-
-  name    = "microservice" 
-  type    = "CNAME"
-  ttl     = "300"
-
-  records = [data.local_file.lb_hostname.content]
+resource "acme_registration" "registration" {
+  account_key_pem = tls_private_key.private_key.private_key_pem
+  email_address   = "faboyakorede@gmail.com" 
 }
 
 
+resource "acme_certificate" "certificate" {
+  account_key_pem           = acme_registration.registration.account_key_pem
+  common_name               = data.aws_route53_zone.example.name
+  subject_alternative_names = ["*.${data.aws_route53_zone.example.name}"]
+
+  dns_challenge {
+    provider = "route53"
+
+    config = {
+      AWS_HOSTED_ZONE_ID = data.aws_route53_zone.example.zone_id
+    }
+  }
+
+  depends_on = [acme_registration.registration]
+}
 
 
-
-
+resource "aws_acm_certificate" "certificate" {
+  certificate_body  = acme_certificate.certificate.certificate_pem
+  private_key       = acme_certificate.certificate.private_key_pem
+  certificate_chain = acme_certificate.certificate.issuer_pem
+}

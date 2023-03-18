@@ -27,8 +27,3 @@ data "aws_route53_zone" "example" {
   name = "korede.me"
 }
 
-
-output "hosted_zone_id" {
-  value = data.aws_route53_zone.example.id
-}
-
