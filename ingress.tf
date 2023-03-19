@@ -11,10 +11,11 @@ resource "kubernetes_ingress_v1" "microservice" {
     annotations = {
       "kubernetes.io/ingress.class" = "nginx"
       "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
+      #"cert-manager.io/cluster-issuer" = "letsencrypt-prod"
     }
   }
  spec {
-    rule {
+    rule { 
       host = "microservice.korede.me"
       http {
         path {
@@ -28,10 +29,15 @@ resource "kubernetes_ingress_v1" "microservice" {
             }
          }
        }
-     }
    }
-}
+   
+   #tls {
+    #  hosts = ["microservice.korede.me"]
+    #  secret_name = "ssl"
+  #  }
 
+  }
+}
 
 
 resource "kubernetes_ingress_v1" "voting" {
@@ -42,11 +48,12 @@ resource "kubernetes_ingress_v1" "voting" {
     annotations = {
       "kubernetes.io/ingress.class" = "nginx"
       "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
+     # "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
     }
   }
  spec {
     rule {
-      host = "voting.korede.me"
+       host = "voting.korede.me"
       http {
         path {
           backend {
@@ -62,6 +69,12 @@ resource "kubernetes_ingress_v1" "voting" {
         }
       }
     }
+
+    #tls {
+    #  hosts = ["voting.korede.me"]
+     # secret_name = "ssl"
+    #}
+
   }
 }
 
@@ -75,6 +88,7 @@ resource "kubernetes_ingress_v1" "grafana" {
     annotations = {
       "kubernetes.io/ingress.class" = "nginx"
       "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
+      #"cert-manager.io/cluster-issuer" = "letsencrypt-prod"
     }
   }
  spec {
@@ -95,6 +109,12 @@ resource "kubernetes_ingress_v1" "grafana" {
         }
       }
     }
+
+    #tls {
+     # hosts = ["grafana.korede.me"]
+     # secret_name = "ssl"
+    #}
+
  }
 }
 
@@ -107,11 +127,12 @@ resource "kubernetes_ingress_v1" "prometheus" {
     annotations = {
       "kubernetes.io/ingress.class" = "nginx"
       "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
+      #"cert-manager.io/cluster-issuer" = "letsencrypt-prod"
     }
   }
  spec {
     rule {
-      host = "prometheus.korede.me"
+       host = "prometheus.korede.me"
       http {
         path {
           backend {
@@ -127,6 +148,12 @@ resource "kubernetes_ingress_v1" "prometheus" {
         }
       }
     }
+
+   #tls {
+     # hosts = ["prometheus.korede.me"]
+     # secret_name = "ssl"
+   # }
+
  }
 }
 
